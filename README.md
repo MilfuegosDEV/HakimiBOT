@@ -21,21 +21,6 @@ To install all the required dependencies, please use the following command:
 pip install -r requirements.txt
 ```
 
-### Execution
-* Fill out the necessary information in [config.json](config.json):
-```json
-{
-    "debug_guilds": [], 
-    "token": ""
-}
-```
-
-> Please read: [how to find the server's ID?](https://www.alphr.com/discord-find-server-id/) and then insert the server ID(s) into the "debug_guilds" array.
-
-> "token" is a reference to the bot's secret token.
-
-* Run the program.
-
 ### Creating an Embed Message.
 
 * Here's an example of usage:

@@ -48,7 +48,9 @@ class SearchCog(discord.Cog):
 
         }
 
-        if not self.__searchTrackByName(query):
+        search_result = self.__searchTrackByName(query)
+
+        if not search_result:
             search_result = self.__spotify.track(query)
             if not search_result:
                 embed = EmbedConstructor(embedInfo)

@@ -1,3 +1,3 @@
 from .general import GeneralCog
-
-__all__ = [GeneralCog]
+from .search import SearchCog
+__all__ = [GeneralCog, SearchCog]

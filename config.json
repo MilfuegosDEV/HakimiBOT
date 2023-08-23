@@ -1,13 +1,10 @@
 {
+    "spotifyApi": {
+        "ClientID": "c953a7b86cf647218222d90148cfaca2",
+        "ClientSecret": "14eeaa291adb4178836f4a1396c27b5d"
+    },
     "discord":{
         "debug_guilds": [1099220406130450444], 
-        "token": "MTE0MjI1NTQ4OTgwNDE2MTA2NA.GEPKgJ.fcNJWlEux4vwUzFf9DhFDwiQs6S-sQqIQ0eMng"
-    },
-    "spotifyApi": {
-        "ClientID": "",
-        "ClientSecret":  ""
-    },
-    "geniusAPI": {
-        "APIKey":"9c9Cb8MN-4-LTJajFXRu3j7sZn6FnV4NKZs6R38mSao8pm9Zm2HCS4f4toonhjN3"
+        "token": "MTE0MjI1NTQ4OTgwNDE2MTA2NA.GVn2mU.jHv72RyZqwCPzSsGOkWuCblKqjPkdUqgmUWv3w"
     }
 }

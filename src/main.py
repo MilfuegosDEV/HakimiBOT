@@ -8,8 +8,19 @@ class HakimiBot(discord.Bot):
     def __init__(self, description=None, *args, **options):
         super().__init__(description, *args, **options)
 
+        self.TOKEN: str = self.__config['discord']['token'] # My bot token
+        self.debug_guilds = self.__config['discord']['debug_guilds'] # My server's ids
+        
         # General commands as `/ping` `/hello`
         self.add_cog(commands.GeneralCog(self))
+        
+    @property
+    def __config(self) -> dict:
+        with open("config.json", 'r') as fp:
+            config: dict = json.load(fp)
+        fp.close()
+        return config
+    
 
     async def on_ready(self):
         """
@@ -24,15 +35,7 @@ class HakimiBot(discord.Bot):
 if __name__ == "__main__":
     try:
         BOT = HakimiBot()
-        # Getting config information:
-        with open("config.json", 'r') as fp:
-            config: dict = json.load(fp)
-        fp.close()
-
-        BOT.debug_guilds = config['debug_guilds']
-
-        # RUNNING BOT
-        BOT.run(config["token"])
+        BOT.run(BOT.TOKEN)
 
     except discord.errors.LoginFailure as LoginFailure:
         print(LoginFailure)

@@ -1,7 +1,9 @@
 import discord
 from discord.commands import option
-from Connection import GeniusConnect, SpotiConnect
 from messages import EmbedConstructor
+
+from spotipy import Spotify
+from lyricsgenius import Genius
 
 
 class MusicCog(discord.Cog):
@@ -12,7 +14,7 @@ class MusicCog(discord.Cog):
     __MusicCommands: discord.SlashCommandGroup = discord.SlashCommandGroup(
         "music", "music commands")
 
-    def __init__(self, spotifyApi: dict, geniusApi: dict) -> None:
+    def __init__(self, spotiConnect: Spotify, geniusConnect: Genius) -> None:
         """
         Initialize the MusicCog.
 
@@ -20,10 +22,13 @@ class MusicCog(discord.Cog):
         :param geniusApi: Dictionary containing Genius API credentials.
         """
         super().__init__()
-        self.__spotify = SpotiConnect(ClientCredentials=spotifyApi)
-        self.__genius = GeniusConnect(Credentials=geniusApi)
 
-    def searchTrackByName(self, q: str) -> dict:
+        # Getting spotify's connection
+        self.__spotify: Spotify = spotiConnect
+        # Getting Genius's connection
+        self.__genius: Genius = geniusConnect
+
+    def __searchTrackByName(self, q: str) -> dict:
         """
         Search for a track by its name using Spotify API.
 
@@ -71,7 +76,7 @@ class MusicCog(discord.Cog):
             },
         }
 
-        search_result = self.searchTrackByName(query)
+        search_result = self.__searchTrackByName(query)
 
         if not search_result:
             search_result = self.__spotify.track(query)

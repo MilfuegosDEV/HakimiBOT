@@ -1,7 +1,7 @@
 import discord
 from discord.commands import option
 from discord.ext import commands
-from Front.embedBuider import EmbedConstructor
+from ..Front import EmbedConstructor
 
 
 class GeneralCog(commands.Cog):

@@ -1,10 +1,9 @@
 import discord
 from discord.commands import option
-from spotipy import Spotify
-from spotipy.oauth2 import SpotifyClientCredentials
+
 from lyricsgenius import Genius
 from Front.embedBuider import EmbedConstructor
-from searchBySongName import searchTrackByName
+from modules.Connection import spoti
 
 
 class SearchCog(discord.Cog):
@@ -14,12 +13,16 @@ class SearchCog(discord.Cog):
 
     def __init__(self, spotifyApi: dict, geniusApi) -> None:
         super().__init__()
-        self.__spotify: Spotify = Spotify(client_credentials_manager=SpotifyClientCredentials(
-            client_id=spotifyApi['ClientID'], client_secret=spotifyApi['ClientSecret']))
-
+        self.__spotify = spoti(spotifyApi=spotifyApi)
         self.__genius: Genius = Genius(access_token=geniusApi["APIKey"])
 
     
+    def searchTrackByName(self, q: str):
+        results = self.__spotify.search(q=q, type="track")
+        if results['tracks']['items']:
+            return results['tracks']['items'][0]
+        else:
+            return None
 
     def __get_lyrics(self, artist, track_name):
         song = self.__genius.search_song(track_name, artist)

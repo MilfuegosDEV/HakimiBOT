@@ -17,8 +17,19 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 - Fixed an issue causing [brief description of fixed issue].
-- Resolved a problem with [another resolved issue]. -->
+- Resolved a problem with [another resolved issue].  -->
 
+
+## [Unreleased]
+
+### Added
+
+- Implemented `/music` group.
+- Added new command `/lyrics` for sending a song's lyrics.
+
+### Improved
+
+- Restructured project folders for better organization.
 
 
 

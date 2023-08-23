@@ -14,6 +14,9 @@ class HakimiBot(discord.Bot):
         # General commands as `/ping` `/hello`
         self.add_cog(commands.GeneralCog(self))
         
+        # Music commands as `/lyrics` 
+        self.add_cog(commands.MusicCog(self.__config["spotifyApi"], self.__config['GeniusAPI']))        
+
     @property
     def __config(self) -> dict:
         with open("config.json", 'r') as fp:

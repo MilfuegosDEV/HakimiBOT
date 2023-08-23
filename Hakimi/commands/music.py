@@ -5,6 +5,7 @@ from messages import EmbedConstructor
 from spotipy import Spotify
 from lyricsgenius import Genius
 
+import re
 
 class MusicCog(discord.Cog):
     """
@@ -52,6 +53,8 @@ class MusicCog(discord.Cog):
         song = self.__genius.search_song(track_name, artist)
         if song:
             lyrics: list = song.lyrics.splitlines()
+            # fixed: the last line had additional info that was not required. 
+            lyrics[-1] = re.sub(r'\d+Embed', '.', lyrics[-1]) # Example: But strangely he feels at home in this place81Embed -> But strangely he feels at home in this place.
             lyrics.pop(0)
             return "\n".join(lyrics)
         else:
@@ -72,7 +75,7 @@ class MusicCog(discord.Cog):
             "color": discord.Color.red(),
             "timestamp": 'now',
             "footer": {
-                "text": "v1.0.0",
+                "text": "v1.0.1",
             },
         }
 

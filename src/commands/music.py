@@ -3,6 +3,7 @@ from discord.commands import option
 from Connection import GeniusConnect, SpotiConnect
 from messages import EmbedConstructor
 
+
 class MusicCog(discord.Cog):
     """
     Cog class for music-related commands in a Discord bot.
@@ -22,20 +23,20 @@ class MusicCog(discord.Cog):
         self.__spotify = SpotiConnect(ClientCredentials=spotifyApi)
         self.__genius = GeniusConnect(Credentials=geniusApi)
 
-    def searchTrackByName(self, q: str):
+    def searchTrackByName(self, q: str) -> dict:
         """
         Search for a track by its name using Spotify API.
 
         :param q: Query string for track search.
         :return: Track information if found, else None.
         """
-        results = self.__spotify.search(q=q, type="track")
+        results: dict = self.__spotify.search(q=q, type="track")
         if results['tracks']['items']:
             return results['tracks']['items'][0]
         else:
             return None
 
-    def __get_lyrics(self, artist, track_name):
+    def __get_lyrics(self, artist, track_name) -> str:
         """
         Get lyrics of a song using Genius API.
 
@@ -45,7 +46,7 @@ class MusicCog(discord.Cog):
         """
         song = self.__genius.search_song(track_name, artist)
         if song:
-            lyrics = song.lyrics.splitlines()
+            lyrics: list = song.lyrics.splitlines()
             lyrics.pop(0)
             return "\n".join(lyrics)
         else:

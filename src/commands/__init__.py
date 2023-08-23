@@ -1,3 +1,3 @@
 from .general import GeneralCog
-from .search import SearchCog
+from .modules.lyrics import SearchCog
 __all__ = [GeneralCog, SearchCog]

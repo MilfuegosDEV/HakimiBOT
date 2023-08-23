@@ -9,7 +9,7 @@ class HakimiBot(discord.Bot):
         super().__init__(description, *args, **options)
 
         self.TOKEN: str = self.__config['discord']['token'] # My bot token
-        self.debug_guilds = self.__config['discord']['debug_guilds'] # My server's ids
+        self.debug_guilds:list = self.__config['discord']['debug_guilds'] # My server's ids
         
         # General commands as `/ping` `/hello`
         self.add_cog(commands.GeneralCog(self))

@@ -85,8 +85,8 @@ class MusicCog(discord.Cog):
                 await ctx.respond(embed=embed.get_embed())
         else:
             embedInfo['fields'] = [{
-                "name": "Author",
-                "value": search_result['artists'][0]['name'],
+                "name": "Album",
+                "value": search_result['album']['name'],
                 "inline": True
             }, {
                 "name": "Release Date",

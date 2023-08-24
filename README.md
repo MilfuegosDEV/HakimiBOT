@@ -15,6 +15,7 @@ HakimiBOT is similar to other bots, but it's designed to be eager to assist you 
 - [Spotipy](https://spotipy.readthedocs.io/en/2.22.1/)
 - [lyricsgenius](https://lyricsgenius.readthedocs.io/en/master/)
 
+
 ### Installation
 
 To install all the required dependencies, please use the following command:
@@ -27,18 +28,23 @@ pip install -r requirements.txt
 ```json
 {
     "spotifyApi": {
-        "ClientID": "", /*https://developer.spotify.com/documentation/web-api*/
+        "ClientID": "", 
         "ClientSecret": "" 
     },
     "discord":{
         "debug_guilds": [], 
-        "token": "" /*https://discord.com/developers/docs/getting-started#configuring-your-bot*/
+        "token": "" 
     },
     "GeniusAPI": {
-        "token": "" /*https://docs.genius.com/*/
+        "token": "" 
     }
 }
 ```
+> ##### Do you need help? Consult this
+
+> - Discord: https://discord.com/developers/docs/getting-started#configuring-your-bot
+> - GeniusAPI: *https://docs.genius.com/
+> - Spotify: https://developer.spotify.com/documentation/web-api
 
 ### Creating an Embed Message.
 
@@ -86,4 +92,3 @@ embed = embed_constructor.get_embed()
 
 ```
 > You only need to fill in the information that you want to include.
-

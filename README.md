@@ -12,6 +12,8 @@ HakimiBOT is similar to other bots, but it's designed to be eager to assist you 
 
 - [PyCord](https://pycord.dev/)
 - [pytz](https://pythonhosted.org/pytz/)
+- [Spotipy](https://spotipy.readthedocs.io/en/2.22.1/)
+- [lyricsgenius](https://lyricsgenius.readthedocs.io/en/master/)
 
 ### Installation
 
@@ -19,6 +21,23 @@ To install all the required dependencies, please use the following command:
 
 ```bash
 pip install -r requirements.txt
+```
+
+#### Insert all credentials into [config.json](config.json)
+```json
+{
+    "spotifyApi": {
+        "ClientID": "", /*https://developer.spotify.com/documentation/web-api*/
+        "ClientSecret": "" 
+    },
+    "discord":{
+        "debug_guilds": [], 
+        "token": "" /*https://discord.com/developers/docs/getting-started#configuring-your-bot*/
+    },
+    "GeniusAPI": {
+        "token": "" /*https://docs.genius.com/*/
+    }
+}
 ```
 
 ### Creating an Embed Message.

@@ -1,7 +1,7 @@
 import discord
 from discord.commands import option
 from discord.ext import commands
-from embedBuider import EmbedConstructor
+from messages import EmbedConstructor
 
 
 class GeneralCog(commands.Cog):
@@ -34,15 +34,30 @@ class GeneralCog(commands.Cog):
         Parameters:
             ctx (discord.context.ApplicationContext): The interaction context.
         """
-        embedInfo: dict = {
-            "title": ":ping_pong: Pong!",
-            "description": "Bot's latency: `{}` :mailbox_with_mail:".format(round(self.bot.latency * 1000, 0)),
-            "color": discord.Color.gold(),
-            "timestamp": "now",
-            "footer": {
-                "text": "v1.0.0",
+        latency_ms = round(self.bot.latency * 1000, 0)
+        description = f"Bot's latency: `{latency_ms}` ms"
+
+        if len(description) <= 4096:
+            embedInfo = {
+                "title": ":ping_pong: Pong!",
+                "description": description,
+                "color": discord.Color.gold(),
+                "timestamp": "now",
+                "footer": {
+                    "text": "v1.0.0",
+                }
             }
-        }
+        else:
+            embedInfo = {
+                "title": ":warning: Ping Warning",
+                "description": "The bot's latency is too high to display.",
+                "color": discord.Color.red(),
+                "timestamp": "now",
+                "footer": {
+                    "text": "v1.0.0",
+                }
+            }
+
         embed = EmbedConstructor(embedInfo)
         await ctx.respond(embed=embed.get_embed())
 

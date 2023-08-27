@@ -11,7 +11,7 @@ class GeneralCog(commands.Cog):
 
     # TODO: `/help`
     def __init__(self, bot: discord.Bot):
-        self.bot: discord.Bot = bot
+        self.__bot: discord.Bot = bot
 
     @commands.slash_command(description='Say hello to someone')
     @option(name='name', type=str, description="Someone's name")
@@ -34,7 +34,7 @@ class GeneralCog(commands.Cog):
         Parameters:
             ctx (discord.context.ApplicationContext): The interaction context.
         """
-        latency_ms = round(self.bot.latency * 1000, 0)
+        latency_ms = round(self.__bot.latency * 1000, 0)
         description = f"Bot's latency: `{latency_ms}` ms"
 
         if len(description) <= 4096:

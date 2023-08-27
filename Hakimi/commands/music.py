@@ -1,11 +1,13 @@
 import discord
 from discord.commands import option
+from discord.ext import tasks
 from messages import EmbedConstructor
 
 from spotipy import Spotify
 from lyricsgenius import Genius
 
 import re
+
 
 class MusicCog(discord.Cog):
     """
@@ -15,10 +17,10 @@ class MusicCog(discord.Cog):
     __MusicCommands: discord.SlashCommandGroup = discord.SlashCommandGroup(
         "music", "music commands")
 
-    def __init__(self, spotiConnect: Spotify, geniusConnect: Genius) -> None:
+    def __init__(self, bot: discord.AutoShardedBot, spotiConnect: Spotify, geniusConnect: Genius) -> None:
         """
         Initialize the MusicCog.
-
+        :param bot: discord.Bot instance
         :param spotifyApi: Dictionary containing Spotify API credentials.
         :param geniusApi: Dictionary containing Genius API credentials.
         """
@@ -28,6 +30,8 @@ class MusicCog(discord.Cog):
         self.__spotify: Spotify = spotiConnect
         # Getting Genius's connection
         self.__genius: Genius = geniusConnect
+        # MyBot
+        self.__bot = bot
 
     def __searchTrackByName(self, q: str) -> dict:
         """
@@ -53,8 +57,7 @@ class MusicCog(discord.Cog):
         song = self.__genius.search_song(track_name, artist)
         if song:
             lyrics: list = song.lyrics.splitlines()
-            # fixed: the last line had additional info that was not required. 
-            lyrics[-1] = re.sub(r'\d+Embed', '.', lyrics[-1]) # Example: But strangely he feels at home in this place81Embed -> But strangely he feels at home in this place.
+            lyrics[-1] = re.sub(r'\d+Embed', '.', lyrics[-1])
             lyrics.pop(0)
             return "\n".join(lyrics)
         else:

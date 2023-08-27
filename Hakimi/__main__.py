@@ -1,19 +1,19 @@
 import discord
+from discord.ext import tasks
 import json
 import commands
 
 from Connection import SpotiConnect, GeniusConnect
 
 
-class HakimiBot(discord.Bot):
+class HakimiBot(discord.AutoShardedBot):
 
     def __init__(self, description=None, *args, **options):
         super().__init__(description, *args, **options)
 
-        # My bot token
-        self.TOKEN: str = self.__config['discord']['token']
-        # My server's ids
-        self.debug_guilds: list = self.__config['discord']['debug_guilds']
+        self.TOKEN: str = self.__config['discord']['token'] # My bot token
+        self.intents.all()
+        self.__update_activity.start() # Activity Status
 
         # API'S CONNECTION
         self.__apisConnection()
@@ -22,8 +22,9 @@ class HakimiBot(discord.Bot):
         self.add_cog(commands.GeneralCog(self))
 
         # Music commands as `/lyrics`
-        self.add_cog(commands.MusicCog(
+        self.add_cog(commands.MusicCog(self,
             spotiConnect=self.__spotiConnection, geniusConnect=self.__geniusConnection))
+
 
     @property
     def __config(self) -> dict:
@@ -33,8 +34,6 @@ class HakimiBot(discord.Bot):
         return config
 
     def __apisConnection(self):
-        """All apis connection
-        """
         self.__spotiConnection = SpotiConnect(
             ClientCredentials=self.__config["spotifyApi"])
 
@@ -43,13 +42,15 @@ class HakimiBot(discord.Bot):
             Credentials=self.__config['GeniusAPI'])
 
     async def on_ready(self):
-        """
-        Event handler for bot being ready.
+        print('Joined as {}!'.format(self.user.name))
 
-        Called when the bot has successfully connected to Discord.
-        """
-        await self.change_presence(activity=discord.Game('/help'))
-        print(f'Joined as {self.user.name}!')
+    @tasks.loop(minutes=10)
+    async def __update_activity(self):
+        await self.change_presence(activity=discord.Game('Helping {} guilds!'.format(len(self.guilds))))
+
+    @__update_activity.before_loop
+    async def before_update_activity(self):
+        await self.wait_until_ready()
 
 
 if __name__ == "__main__":

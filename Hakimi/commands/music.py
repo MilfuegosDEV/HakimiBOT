@@ -6,6 +6,8 @@ from messages import EmbedConstructor
 from spotipy import Spotify
 from lyricsgenius import Genius
 
+import asyncio
+
 import re
 
 
@@ -32,6 +34,12 @@ class MusicCog(discord.Cog):
         self.__genius: Genius = geniusConnect
         # MyBot
         self.__bot = bot
+
+        # Voice cache.
+        self.__connections = {}
+
+        # Voice auto disconnection
+        self.disconnect_countdown.start()
 
     def __searchTrackByName(self, q: str) -> dict:
         """
@@ -151,3 +159,48 @@ class MusicCog(discord.Cog):
 
             embed = EmbedConstructor(embedInfo)
             await ctx.respond(embed=embed.get_embed())
+
+    @tasks.loop(minutes=1)
+    async def disconnect_countdown(self):
+        for guild_id, vc in self.__connections.copy().items():
+            if len(vc.channel.members) == 1 and vc.is_connected():
+                await vc.disconnect()
+                del self.__connections[guild_id]
+            if guild_id == self.__ctx.guild.id:
+                await self.__ctx.respond(f"Logged out of {vc.channel.mention}")
+
+    @disconnect_countdown.before_loop
+    async def before_disconnect_countdown(self):
+        await self.__bot.wait_until_ready()
+
+    @disconnect_countdown.after_loop
+    async def after_disconnect_countdown(self):
+        self.disconnect_countdown.cancel()
+
+    @__MusicCommands.command(description="Play music into a voice channel")
+    async def play(self, ctx: discord.context.ApplicationContext):
+        self.__ctx = ctx
+        voice = ctx.author.voice
+        if not voice:
+            await ctx.respond("You must be in a voice channel!")
+        else:
+            try:
+                vc = await voice.channel.connect()
+                self.__connections[ctx.guild.id] = vc
+                await ctx.respond("Joined into {}".format(voice.channel.mention))
+            except Exception as e:
+                if "Task is already launched and is not completed." in str(e):
+                    await asyncio.sleep(2)
+                    self.disconnect_countdown.restart()
+                else:
+                    await ctx.respond(str(e))
+
+    @__MusicCommands.command(description="Stop and disconnect the bot from the voice channel")
+    async def stop(self, ctx: discord.context.ApplicationContext):
+        vc = self.__connections.get(ctx.guild.id)
+        if vc:
+            await vc.disconnect()
+            del self.__connections[ctx.guild.id]
+            await ctx.respond("Disconnected from the voice channel.")
+        else:
+            await ctx.respond("I'm not connected to any voice channel.")
